@@ -23,16 +23,18 @@ namespace Smart_ChargingApi.Controllers
         }
         // GET: api/ChargeStation
         [HttpGet]
+        [ActionName(nameof(Get))]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<ChargeStation> chargeStations = await _dataRepository.Get();
+            IEnumerable<ChargeStation> chargeStations = await _dataRepository.GetAsync();
             return Ok(chargeStations);
         }
         // GET: api/ChargeStation/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [ActionName(nameof(Get))]
+        public async Task<IActionResult> Get(int id)
         {
-            ChargeStation chargeStation = await _dataRepository.GetById(id);
+            ChargeStation chargeStation = await _dataRepository.GetByIdAsync(id);
             if (chargeStation == null)
             {
                 return NotFound("The Charge Station record couldn't be found.");
@@ -47,11 +49,9 @@ namespace Smart_ChargingApi.Controllers
             {
                 return BadRequest("Charge Station is null.");
             }
-            await _dataRepository.Post(chargeStation);
-            return CreatedAtRoute(
-                  "Get",
-                  new { Id = chargeStation.Id },
-                  chargeStation);
+            await _dataRepository.PostAsync(chargeStation);
+            return CreatedAtAction(nameof(Get), new { id = chargeStation.Id }, chargeStation);
+
         }
         // PUT: api/ChargeStation/5
         [HttpPut("{id}")]
@@ -61,24 +61,24 @@ namespace Smart_ChargingApi.Controllers
             {
                 return BadRequest("Charge Station is null.");
             }
-            ChargeStation chargeStationToUpdate = await _dataRepository.GetById(id);
+            ChargeStation chargeStationToUpdate = await _dataRepository.GetByIdAsync(id);
             if (chargeStationToUpdate == null)
             {
                 return NotFound("The Charge Station record couldn't be found.");
             }
-            await _dataRepository.Update(chargeStationToUpdate); //chargeStationToUpdate
+            await _dataRepository.UpdateAsync(chargeStationToUpdate); //chargeStationToUpdate
             return NoContent();
         }
         // DELETE: api/ChargeStation/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            ChargeStation chargeStation = await _dataRepository.GetById(id);
+            ChargeStation chargeStation = await _dataRepository.GetByIdAsync(id);
             if (chargeStation == null)
             {
                 return NotFound("The Charge Station record couldn't be found.");
             }
-            await _dataRepository.Delete(chargeStation);
+            await _dataRepository.DeleteAsync(chargeStation);
             return NoContent();
         }
     }

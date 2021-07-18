@@ -25,16 +25,18 @@ namespace Smart_ChargingApi.Controllers
         }
         // GET: api/Connector
         [HttpGet]
+        [ActionName(nameof(Get))]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<Connector> connectors = await _dataRepository.Get();
+            IEnumerable<Connector> connectors = await _dataRepository.GetAsync();
             return Ok(connectors);
         }
         // GET: api/Connector/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [ActionName(nameof(Get))]
+        public async Task<IActionResult> Get(int id)
         {
-            Connector connector = await _dataRepository.GetById(id);
+            Connector connector = await _dataRepository.GetByIdAsync(id);
             if (connector == null)
             {
                 return NotFound("The connector record couldn't be found.");
@@ -49,11 +51,9 @@ namespace Smart_ChargingApi.Controllers
             {
                 return BadRequest("Connector is null.");
             }
-            await _dataRepository.Post(connector);
-            return CreatedAtRoute(
-                  "Get",
-                  new { Id = connector.Id },
-                  connector);
+            await _dataRepository.PostAsync(connector);
+            return CreatedAtAction(nameof(Get), new { id = connector.Id }, connector);
+
         }
         // PUT: api/Connector/5
         [HttpPut("{id}")]
@@ -63,24 +63,24 @@ namespace Smart_ChargingApi.Controllers
             {
                 return BadRequest("Connector is null.");
             }
-            Connector connectorToUpdate = await _dataRepository.GetById(id);
+            Connector connectorToUpdate = await _dataRepository.GetByIdAsync(id);
             if (connectorToUpdate == null)
             {
                 return NotFound("The connector record couldn't be found.");
             }
-            await _dataRepository.Update(connector);//connectorToUpdate
+            await _dataRepository.UpdateAsync(connector);//connectorToUpdate
             return NoContent();
         }
         // DELETE: api/Connector/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Connector connector= await _dataRepository.GetById(id);
+            Connector connector= await _dataRepository.GetByIdAsync(id);
             if (connector == null)
             {
                 return NotFound("The connector record couldn't be found.");
             }
-            await _dataRepository.Delete(connector);
+            await _dataRepository.DeleteAsync(connector);
             return NoContent();
         }
 

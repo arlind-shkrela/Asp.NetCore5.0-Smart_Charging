@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace Smart_ChargingApi.Models
         [StringLength(100)]
         public string Name { get; set; }
 
-        public double Capacity { get; set; } = 0;
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {0}")]
+        public float Capacity { get; set; } = 0;
+
+
+
+        public ICollection<ChargeStation> ChargeStations { get; set; }
+
     }
 }

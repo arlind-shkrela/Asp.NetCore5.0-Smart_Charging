@@ -17,28 +17,24 @@ namespace Smart_ChargingApi.DataManager
             _context = context;
         }
 
-        public async Task<List<Group>> Get()
+        public async Task<List<Group>> GetAsync()
         {
-            return await _context.Groups.ToListAsync();
+            return await _context.Groups.Include(s=>s.ChargeStations).ToListAsync();
         }
 
-        public async Task<Group> GetById(int id)
+        public async Task<Group> GetByIdAsync(int id)
         {
-            return await _context.Groups
+            return await _context.Groups.Include(s=>s.ChargeStations)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
-        public async Task Add(Group entity)
-        {
-            await _context.Groups.AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-        public async Task Post(Group model)
+
+        public async Task PostAsync(Group model)
         {
             await _context.Groups.AddAsync(model);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(Group group)
+        public async Task UpdateAsync(Group group)
         {
             _context.Entry(group).State = EntityState.Modified;
 
@@ -53,7 +49,7 @@ namespace Smart_ChargingApi.DataManager
         }
 
 
-        public async Task Delete(Group group)
+        public async Task DeleteAsync(Group group)
         {
             try
             {

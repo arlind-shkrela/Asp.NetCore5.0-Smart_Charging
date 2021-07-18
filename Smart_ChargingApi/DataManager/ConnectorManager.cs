@@ -17,12 +17,12 @@ namespace Smart_ChargingApi.DataManager
             _context = context;
         }
 
-        public async Task<List<Connector>> Get()
+        public async Task<List<Connector>> GetAsync()
         {
             return await _context.Connectors.ToListAsync();
         }
 
-        async Task<Connector> IBase<Connector>.GetById(int id)
+        async Task<Connector> IBase<Connector>.GetByIdAsync(int id)
         {
             return await _context.Connectors
                 .FirstOrDefaultAsync(e => e.Id == id);
@@ -32,13 +32,13 @@ namespace Smart_ChargingApi.DataManager
            await  _context.Connectors.AddAsync(entity);
            await _context.SaveChangesAsync();
         }
-        public async Task Post(Connector model)
+        public async Task PostAsync(Connector model)
         {
             await _context.Connectors.AddAsync(model);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(Connector updatedModel)
+        public async Task UpdateAsync(Connector updatedModel)
         {
             _context.Entry(updatedModel).State = EntityState.Modified;
 
@@ -53,7 +53,7 @@ namespace Smart_ChargingApi.DataManager
         }
 
 
-        public async Task Delete(Connector model)
+        public async Task DeleteAsync(Connector model)
         {
             try
             {

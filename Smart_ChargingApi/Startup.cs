@@ -31,12 +31,12 @@ namespace Smart_ChargingApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Smart_Charging_Context>(opts => opts.UseSqlServer(Configuration["ConnectionString:smart_charging"]));
+            services.AddDbContext<Smart_Charging_Context>(opts => opts.UseSqlServer(Configuration["ConnectionString:smart_charging"])
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
            
-            services.AddScoped<IBase<Group>, GroupManager>();
-            services.AddScoped<IBase<Connector>, ConnectorManager>();
-            services.AddScoped<IBase<ChargeStation>, ChargeStationManager>();
-            //services.AddScoped<IChargeStation, ChargeStationManager>();
+            services.AddScoped<IGroup, GroupManager>();
+            services.AddScoped<IConnector, ConnectorManager>();
+            services.AddScoped<IChargeStation, ChargeStationManager>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

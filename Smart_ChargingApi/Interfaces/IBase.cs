@@ -7,15 +7,15 @@ namespace Smart_ChargingApi.Interfaces
 {
     public interface IBase<T>
     {
-        Task<List<T>> Get();
+        Task<List<T>> GetAsync();
 
-        Task<T> GetById(int id);
+        Task<T> GetByIdAsync(int id);
 
-        Task Post(T model);
+        Task PostAsync(T model);
          
-        Task Update(T updatedModel);
+        Task UpdateAsync(T updatedModel);
 
-        Task Delete(T entity);
+        Task DeleteAsync(T entity);
 
         bool Exists(int Id);
     }

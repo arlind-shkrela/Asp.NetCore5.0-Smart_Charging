@@ -27,14 +27,16 @@ namespace Smart_ChargingApi.Controllers
 
         // GET: api/Group
         [HttpGet]
+        [ActionName(nameof(Get))]
         public async Task<ActionResult<IEnumerable<Group>>> Get()
         {
-            IEnumerable<Group> groups = await _dataRepository.Get();
+            IEnumerable<Group> groups = await _dataRepository.GetAsync();
             return Ok(groups);
         }
 
         // GET: api/Group/5
         [HttpGet("{id}")]
+        [ActionName(nameof(Get))]
         public async Task<ActionResult<Group>> Get(int id)
         {
             if (id == 0)
@@ -42,7 +44,7 @@ namespace Smart_ChargingApi.Controllers
                 return BadRequest();
             }
 
-            Group group = await _dataRepository.GetById(id);
+            Group group = await _dataRepository.GetByIdAsync(id);
             if (group == null)
             {
                 return NotFound("The group record couldn't be found.");
@@ -52,18 +54,16 @@ namespace Smart_ChargingApi.Controllers
 
         // POST: api/Group
         [HttpPost]
+        [ActionName(nameof(Post))]
         public async Task<ActionResult<Group>> Post([FromBody] Group group)
         {
             if (group == null)
             {
                 return BadRequest("Group is null.");
             }
-            await _dataRepository.Post(group);
-            //return CreatedAtAction("GetGroup", new { id = group.Id }, group);
-            return CreatedAtRoute(
-                  "Get",
-                  new { Id = group.Id },
-                  group);
+            await _dataRepository.PostAsync(group);
+            return CreatedAtAction(nameof(Get), new { id = group.Id }, group);
+            
         }
 
         // PUT: api/Group/5
@@ -78,7 +78,7 @@ namespace Smart_ChargingApi.Controllers
             {
                 return BadRequest();
             }
-            Group groupToUpdate = await _dataRepository.GetById(id);
+            Group groupToUpdate = await _dataRepository.GetByIdAsync(id);
             if (groupToUpdate == null)
             {
                 return NotFound("The group record couldn't be found.");
@@ -86,7 +86,7 @@ namespace Smart_ChargingApi.Controllers
 
             try
             {
-                 await _dataRepository.Update(group);
+                 await _dataRepository.UpdateAsync(group);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -111,12 +111,12 @@ namespace Smart_ChargingApi.Controllers
                 return BadRequest();
             }
 
-            Group group = await _dataRepository.GetById(id);
+            Group group = await _dataRepository.GetByIdAsync(id);
             if (group == null)
             {
                 return NotFound("The group record couldn't be found.");
             }
-            await _dataRepository.Delete(group);
+            await _dataRepository.DeleteAsync(group);
             return NoContent();
         }
        

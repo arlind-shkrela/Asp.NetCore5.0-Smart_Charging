@@ -17,28 +17,23 @@ namespace Smart_ChargingApi.DataManager
             _context = context;
         }
 
-        public async Task<List<ChargeStation>> Get()
+        public async Task<List<ChargeStation>> GetAsync()
         {
             return await _context.ChargeStations.ToListAsync();
         }
 
-        public async Task<ChargeStation> GetById(int id)
+        public async Task<ChargeStation> GetByIdAsync(int id)
         {
             return await _context.ChargeStations
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
-        public async Task Add(ChargeStation entity)
-        {
-            await _context.ChargeStations.AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-        public async Task Post(ChargeStation model)
+        public async Task PostAsync(ChargeStation model)
         {
             await _context.ChargeStations.AddAsync(model);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(ChargeStation updatedModel)
+        public async Task UpdateAsync(ChargeStation updatedModel)
         {
             _context.Entry(updatedModel).State = EntityState.Modified;
 
@@ -52,7 +47,7 @@ namespace Smart_ChargingApi.DataManager
             }
         }
 
-        public async Task Delete(ChargeStation model)
+        public async Task DeleteAsync(ChargeStation model)
         {
             try
             {
