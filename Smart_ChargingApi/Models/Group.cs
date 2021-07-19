@@ -16,8 +16,8 @@ namespace Smart_ChargingApi.Models
         [Display(Name= "Name")]
         public string Name { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter a value bigger than {0}")]
-        public float Capacity { get; set; } = 0;
+        [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than {0}")]
+        public float Capacity { get; set; } = 1;
 
 
         public ICollection<ChargeStation> ChargeStations { get; set; }

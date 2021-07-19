@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Smart_ChargingApi.DTO.Requests;
 using Smart_ChargingApi.Interfaces;
 using Smart_ChargingApi.Models;
 using System;
@@ -17,13 +19,15 @@ namespace Smart_ChargingApi.Controllers
         private readonly IConnector _dataRepository;
         private readonly IChargeStation _changeStationdataRepository;
         private readonly ILogger<ConnectorController> _logger;
+        private readonly IMapper _mapper;
 
-        public ConnectorController(IConnector dataRepository, IChargeStation changeStationdataRepository,
+        public ConnectorController(IConnector dataRepository, IChargeStation changeStationdataRepository, IMapper mapper,
             ILogger<ConnectorController> logger)
         {
             _dataRepository = dataRepository;
             _changeStationdataRepository = changeStationdataRepository;
             _logger = logger;
+            _mapper = mapper;
 
         }
         // GET: api/Connector
@@ -97,18 +101,44 @@ namespace Smart_ChargingApi.Controllers
         }
         // PUT: api/Connector/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Connector connector)
+        public async Task<IActionResult> Put(int id, [FromBody] ConnectorDTOUpdate connectorToUpdate)
         {
-            if (connector == null)
+            if (connectorToUpdate == null)
             {
                 return BadRequest("Connector is null.");
             }
-            Connector connectorToUpdate = await _dataRepository.GetByIdAsync(id);
-            if (connectorToUpdate == null)
+            Connector connectorExist = await _dataRepository.GetByIdAsync(id);
+            if (connectorExist == null)
             {
                 return NotFound("The connector record couldn't be found.");
             }
-            await _dataRepository.UpdateAsync(connector);//connectorToUpdate
+
+            //applying the same loggic as Create checking if execc the Group capacity
+            ChargeStation changeStation = await _changeStationdataRepository.GetByIdAsync(connectorToUpdate.ChargeStationsId ?? 0);
+            if (changeStation != null)
+            {
+                return BadRequest("ChangeStation record couldn't be found.");
+            }
+
+            float max_current = connectorToUpdate.Max_Current;
+            List<ChargeStation> chargeStations = await _changeStationdataRepository.GetChargeStationByGroupIdAsync(changeStation.GroupId);
+
+            foreach (var item in chargeStations)
+            {
+                max_current += item.Connector.Max_Current;
+            }
+
+            if (max_current > chargeStations.FirstOrDefault().Group.Capacity)
+            {
+                return BadRequest("Connector Max current exceeded Group capacity.");
+
+            }
+
+            Connector connector = _mapper.Map<Connector>(connectorToUpdate);
+
+           
+
+            await _dataRepository.UpdateAsync(connector);
             return NoContent();
         }
         // DELETE: api/Connector/5

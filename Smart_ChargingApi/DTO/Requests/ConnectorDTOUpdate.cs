@@ -15,5 +15,8 @@ namespace Smart_ChargingApi.DTO.Requests
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a value equal/bigger than {1}")]
         public float Max_Current { get; set; } = 1;
+
+        [Required(ErrorMessage = "Please enter a value Charge Station Id")]
+        public int? ChargeStationsId { get; set; }
     }
 }

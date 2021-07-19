@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "mssql1": {
+    "mssql2": {
       "type": "mssql.onprem",
       "connectionId": "ConnectionString:smart_charging",
-      "secretStore": "AzureAppSettings"
+      "secretStore": null
     }
   }
 }
