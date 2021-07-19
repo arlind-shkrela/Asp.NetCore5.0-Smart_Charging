@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smart_ChargingApi.Data;
 
 namespace Smart_ChargingApi.Migrations
 {
     [DbContext(typeof(Smart_Charging_Context))]
-    partial class Smart_Charging_ContextModelSnapshot : ModelSnapshot
+    [Migration("20210719091327_ConnectorFKToChargeStation")]
+    partial class ConnectorFKToChargeStation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,6 +29,7 @@ namespace Smart_ChargingApi.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("ConnectorId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("GroupId")
@@ -82,7 +85,9 @@ namespace Smart_ChargingApi.Migrations
                 {
                     b.HasOne("Smart_ChargingApi.Models.Connector", "Connector")
                         .WithMany("ChargeStations")
-                        .HasForeignKey("ConnectorId");
+                        .HasForeignKey("ConnectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Smart_ChargingApi.Models.Group", "Group")
                         .WithMany("ChargeStations")

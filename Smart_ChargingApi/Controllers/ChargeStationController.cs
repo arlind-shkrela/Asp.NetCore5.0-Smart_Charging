@@ -15,6 +15,7 @@ namespace Smart_ChargingApi.Controllers
     public class ChargeStationController : ControllerBase
     {
         private readonly IChargeStation _dataRepository;
+
         private readonly ILogger<ChargeStationController> _logger;
         public ChargeStationController(IChargeStation dataRepository, ILogger<ChargeStationController> logger)
         {
@@ -49,6 +50,12 @@ namespace Smart_ChargingApi.Controllers
             {
                 return BadRequest("Charge Station is null.");
             }
+            List<ChargeStation> ChargeStationByGroup = await _dataRepository.GetChargeStationByGroupIdAsync(chargeStation.GroupId);
+            if (ChargeStationByGroup.Count > 0)
+            {
+                return BadRequest("The Charge Station can be only in one Group at the same time!");
+            }
+
             await _dataRepository.PostAsync(chargeStation);
             return CreatedAtAction(nameof(Get), new { id = chargeStation.Id }, chargeStation);
 

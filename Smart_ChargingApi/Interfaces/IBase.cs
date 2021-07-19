@@ -11,7 +11,7 @@ namespace Smart_ChargingApi.Interfaces
 
         Task<T> GetByIdAsync(int id);
 
-        Task PostAsync(T model);
+        Task<int> PostAsync(T model);
          
         Task UpdateAsync(T updatedModel);
 

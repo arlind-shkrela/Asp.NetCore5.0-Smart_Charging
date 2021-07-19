@@ -15,11 +15,14 @@ namespace Smart_ChargingApi.Controllers
     public class ConnectorController : ControllerBase
     {
         private readonly IConnector _dataRepository;
+        private readonly IChargeStation _changeStationdataRepository;
         private readonly ILogger<ConnectorController> _logger;
 
-        public ConnectorController(IConnector dataRepository, ILogger<ConnectorController> logger)
+        public ConnectorController(IConnector dataRepository, IChargeStation changeStationdataRepository,
+            ILogger<ConnectorController> logger)
         {
             _dataRepository = dataRepository;
+            _changeStationdataRepository = changeStationdataRepository;
             _logger = logger;
 
         }
@@ -51,8 +54,29 @@ namespace Smart_ChargingApi.Controllers
             {
                 return BadRequest("Connector is null.");
             }
-            await _dataRepository.PostAsync(connector);
-            return CreatedAtAction(nameof(Get), new { id = connector.Id }, connector);
+            //add to changeStation
+            if (connector.ChargeStationsId != 0 || connector.ChargeStationsId != null)
+            {
+                
+                //check capacity
+                
+
+
+               var connectorId =  await _dataRepository.PostAsync(connector);
+
+                ChargeStation changeStation = await _changeStationdataRepository.GetByIdAsync(connector.ChargeStationsId ?? 0);
+                if (changeStation != null)
+                {
+                    changeStation.ConnectorId = connectorId;
+                    await _changeStationdataRepository.UpdateAsync(changeStation);
+                }
+                return CreatedAtAction(nameof(Get), new { id = connector.Id }, connector);
+            }
+            else
+            {
+                return BadRequest();
+            }
+         
 
         }
         // PUT: api/Connector/5

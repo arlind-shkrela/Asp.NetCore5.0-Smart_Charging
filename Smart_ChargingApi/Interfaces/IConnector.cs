@@ -8,6 +8,6 @@ namespace Smart_ChargingApi.Interfaces
 {
     public interface IConnector: IBase<Connector>
     {
-
+        Task<List<ChargeStation>> GetChargeStationByConnectionIdAsync(int id);
     }
 }

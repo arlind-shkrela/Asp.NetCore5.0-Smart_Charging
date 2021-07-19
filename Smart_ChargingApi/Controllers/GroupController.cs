@@ -28,9 +28,9 @@ namespace Smart_ChargingApi.Controllers
         // GET: api/Group
         [HttpGet]
         [ActionName(nameof(Get))]
-        public async Task<ActionResult<IEnumerable<Group>>> Get()
+        public async Task<ActionResult<List<Group>>> Get()
         {
-            IEnumerable<Group> groups = await _dataRepository.GetAsync();
+            List<Group> groups = await _dataRepository.GetAsync();
             return Ok(groups);
         }
 

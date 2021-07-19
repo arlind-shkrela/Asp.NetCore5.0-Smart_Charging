@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Smart_ChargingApi.Data;
 
 namespace Smart_ChargingApi.Migrations
 {
     [DbContext(typeof(Smart_Charging_Context))]
-    partial class Smart_Charging_ContextModelSnapshot : ModelSnapshot
+    [Migration("20210719092840_checkngPendin")]
+    partial class checkngPendin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

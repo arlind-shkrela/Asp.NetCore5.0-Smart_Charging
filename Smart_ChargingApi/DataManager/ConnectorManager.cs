@@ -19,23 +19,26 @@ namespace Smart_ChargingApi.DataManager
 
         public async Task<List<Connector>> GetAsync()
         {
-            return await _context.Connectors.ToListAsync();
+            return await _context.Connectors.Include(s => s.ChargeStations).ThenInclude(s => s.Group).ToListAsync();
         }
 
         async Task<Connector> IBase<Connector>.GetByIdAsync(int id)
         {
-            return await _context.Connectors
+            return await _context.Connectors.Include(s => s.ChargeStations).ThenInclude(s => s.Group)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
-        public async Task Add(Connector entity)
+        public async Task<List<ChargeStation>> GetChargeStationByConnectionIdAsync(int id)
         {
-           await  _context.Connectors.AddAsync(entity);
-           await _context.SaveChangesAsync();
+           return await _context.ChargeStations.Include(s => s.Group).Where(s => s.ConnectorId == 1).ToListAsync();
         }
-        public async Task PostAsync(Connector model)
+
+        public async Task<int> PostAsync(Connector model)
         {
-            await _context.Connectors.AddAsync(model);
+            Connector connector = model;
+            await _context.Connectors.AddAsync(connector);
             await _context.SaveChangesAsync();
+            int id = connector.Id;
+            return id;
         }
 
         public async Task UpdateAsync(Connector updatedModel)
@@ -64,7 +67,7 @@ namespace Smart_ChargingApi.DataManager
             {
                 throw;
             }
-    
+
 
         }
 
@@ -72,5 +75,7 @@ namespace Smart_ChargingApi.DataManager
         {
             return _context.Groups.Any(e => e.Id == id);
         }
+
+
     }
 }

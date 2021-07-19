@@ -19,19 +19,27 @@ namespace Smart_ChargingApi.DataManager
 
         public async Task<List<ChargeStation>> GetAsync()
         {
-            return await _context.ChargeStations.ToListAsync();
+            return await _context.ChargeStations.Include(s=>s.Connector).Include(s=>s.Group).ToListAsync();
         }
 
         public async Task<ChargeStation> GetByIdAsync(int id)
         {
-            return await _context.ChargeStations
+            return await _context.ChargeStations.Include(s => s.Connector).Include(s => s.Group)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
-        public async Task PostAsync(ChargeStation model)
+        public async Task<List<ChargeStation>> GetChargeStationByGroupIdAsync(int id)
         {
-            await _context.ChargeStations.AddAsync(model);
-            await _context.SaveChangesAsync();
+            return await _context.ChargeStations.Include(s => s.Connector).Include(s => s.Group).Where(s=>s.GroupId == id)
+                .ToListAsync();
         }
+        public async Task<int> PostAsync(ChargeStation model)
+        {
+            ChargeStation chargeStation = model;
+            await _context.ChargeStations.AddAsync(chargeStation);
+            await _context.SaveChangesAsync();
+            return chargeStation.Id;
+        }
+
 
         public async Task UpdateAsync(ChargeStation updatedModel)
         {

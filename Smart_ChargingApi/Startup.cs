@@ -15,6 +15,7 @@ using Smart_ChargingApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Smart_ChargingApi
@@ -33,10 +34,13 @@ namespace Smart_ChargingApi
         {
             services.AddDbContext<Smart_Charging_Context>(opts => opts.UseSqlServer(Configuration["ConnectionString:smart_charging"])
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
-           
+
             services.AddScoped<IGroup, GroupManager>();
             services.AddScoped<IConnector, ConnectorManager>();
             services.AddScoped<IChargeStation, ChargeStationManager>();
+
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -28,10 +28,12 @@ namespace Smart_ChargingApi.DataManager
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task PostAsync(Group model)
+        public async Task<int> PostAsync(Group model)
         {
-            await _context.Groups.AddAsync(model);
+            Group group = model;
+            await _context.Groups.AddAsync(group);
             await _context.SaveChangesAsync();
+            return group.Id;
         }
 
         public async Task UpdateAsync(Group group)
