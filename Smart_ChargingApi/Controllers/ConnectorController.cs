@@ -59,12 +59,28 @@ namespace Smart_ChargingApi.Controllers
             {
                 
                 //check capacity
-                
-
-
-               var connectorId =  await _dataRepository.PostAsync(connector);
 
                 ChargeStation changeStation = await _changeStationdataRepository.GetByIdAsync(connector.ChargeStationsId ?? 0);
+                if (changeStation != null)
+                {
+                    return BadRequest("ChangeStation record couldn't be found.");
+                }
+                float max_current = connector.Max_Current;
+                List<ChargeStation> chargeStations = await _changeStationdataRepository.GetChargeStationByGroupIdAsync(changeStation.GroupId);
+                
+                foreach (var item in chargeStations)
+                {
+                    max_current += item.Connector.Max_Current;
+                }
+
+                if (max_current > chargeStations.FirstOrDefault().Group.Capacity)
+                {
+                    return BadRequest("Connector Max current exceeded Group capacity.");
+
+                }
+
+                var connectorId = await _dataRepository.PostAsync(connector);
+
                 if (changeStation != null)
                 {
                     changeStation.ConnectorId = connectorId;
