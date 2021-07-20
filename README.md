@@ -14,5 +14,5 @@ To Set the environment locally:
 ToDo: 
 - Developing Unit Tests
   
-Feel Free to use it/ or parts of it in your project. 
+Feel Free to use it/ or parts of it in your project. <br />
 Arlind
