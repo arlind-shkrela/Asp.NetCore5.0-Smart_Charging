@@ -4,7 +4,7 @@ Other Libraty included: AutoMapper
 Smart Charging is the asp.net core 5.0 web api solution, with an SQL Server Database with the purpose to expose CRUD and some Logic endpoints for a relatively small schema.The Solution uses Entity Framework Core code first for continuing schema generation and updates. Generic interfaces, inheritance etc.<br />
 Other Library included: AutoMapper
 
-Hostet in Azure together with sql db: https://smartchargingapi.azurewebsites.net/swagger/index.html
+Hosted in Azure together with sql db: https://smartchargingapi.azurewebsites.net/swagger/index.html
 
 To Set the environment locally: 
 - ~~Either provide your public ip so I can allows connection from Azure SQL Server DB~~, <br /> 
