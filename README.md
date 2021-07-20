@@ -5,7 +5,8 @@ The Solution uses Entitity Framework Core code first for continuing schema gener
 Other Libraty included: AutoMapper
 
 To Set the enviorement locally: 
-- Either provide your public ip so i can allows connection from Azure SQL Server DB,
+- ~~Either provide your public ip so i can allows connection from Azure SQL Server DB~~, <br /> 
+  (UPDATE,I Just allowed public connection with azure sql db, so you can use the following connection string in order to have a look at db locally or ssms)
 - Or, you can create a db locally, update the connection string in appsetting.json and from PM Console >> update-database. (In the project, you can find an sql file for adding       some demo data) 
 
 ToDo: 
