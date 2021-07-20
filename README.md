@@ -11,7 +11,6 @@ To Set the enviorement locally:
 
 ToDo: 
 - Developing Unit Tests
-- Deploying in Azure (fix)
   
 Feel Free to use it/ or parts of it in your project. 
 Arlind
