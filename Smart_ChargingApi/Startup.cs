@@ -60,6 +60,15 @@ namespace Smart_ChargingApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart_Charging_Api v1"));
             }
+            else
+            {
+                app.UseSwagger().UseSwaggerUI(s =>
+                {
+                    s.SwaggerEndpoint("/swagger/v1/swagger.json", "SqlViewService v1");
+                    s.RoutePrefix = "swagger";
+                });
+            }
+           
 
             app.UseHttpsRedirection();
 
